@@ -58,9 +58,10 @@
       
       thisProduct.id = id;
       thisProduct.data = data;
-
-      thisProduct.renderInMenu(); //konstruktor uruchomi funckje renderInMenu od razu po utworzeniu instancji
       
+      thisProduct.renderInMenu(); //konstruktor uruchomi funckje renderInMenu od razu po utworzeniu instancji
+      thisProduct.initAccordion();  
+
       console.log('new Product:', thisProduct);
     }
     renderInMenu(){ //metoda, ktora renderuje, czyli tworzy produkty na stronie
@@ -75,6 +76,30 @@
       
       menuContainer.appendChild(thisProduct.element); /* add element to menu */ //metoda appendChild dodaje stworzony element fo menu
       }
+    
+    initAccordion(){ /* tworze metode initAccordion */
+      const thisProduct = this;
+  
+      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable); /* find the clickable trigger (the element that should react to clicking) */
+      console.log('clickableTrigger:', clickableTrigger);
+
+    /* START: add event listener to clickable trigger on event click */
+      clickableTrigger.addEventListener('click', function(event) {
+      console.log('clicked');
+      
+      event.preventDefault();  /* prevent default action for event */
+
+        const activeProduct = document.querySelector(select.all.menuProductsActive); /* find active product (product that has active class) */
+        //console.log('active produts:', activeProduct);
+
+        if(activeProduct != null && thisProduct.element) {  /* if there is active product and it's not thisProduct.element, remove class active from it */
+          activeProduct.classList.remove('active'); /* != null sprawdza czy element DOM udalo sie znalezc, !=thisProduct.element - sprawdza czy aktywny produkt jest rozny od elementu biezacego */
+          }
+  
+        thisProduct.element.classList.toggle('active');    /* toggle active class on thisProduct.element */  /* toogle - jesli danej klasy nie ma - dodaje, jesli jest - zabiera */                                          
+    });
+
+    }
 
   }
 
