@@ -60,6 +60,7 @@
       thisProduct.data = data;
       
       thisProduct.renderInMenu(); //konstruktor uruchomi funckje renderInMenu od razu po utworzeniu instancji
+      thisProduct.getElements();
       thisProduct.initAccordion();  
 
       console.log('new Product:', thisProduct);
@@ -76,16 +77,25 @@
       
       menuContainer.appendChild(thisProduct.element); /* add element to menu */ //metoda appendChild dodaje stworzony element fo menu
       }
-    
-    initAccordion(){ /* tworze metode initAccordion */
+   
+    getElements(){ // tworze metode getElements, ktora szuka elementow w konterze produktu -> by nie wyszukiwac tych samych elementow wielokrotnie
+      const thisProduct = this;
+
+      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
+      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
+      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+    }
+
+    initAccordion(){ // tworze metode initAccordion 
       const thisProduct = this;
   
-      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable); /* find the clickable trigger (the element that should react to clicking) */
-      console.log('clickableTrigger:', clickableTrigger);
-
-    /* START: add event listener to clickable trigger on event click */
-      clickableTrigger.addEventListener('click', function(event) {
-      console.log('clicked');
+      //const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable); /* find the clickable trigger (the element that should react to clicking) */
+      // wykorzystuje elementy z metody getElements - definiowanie nowej zmiennej jest zbedne 
+      // clickableTrigger.addEventListener('click', function(event) {
+      
+      thisProduct.accordionTrigger.addEventListener('click', function(event) { /* START: add event listener to clickable trigger on event click */
       
       event.preventDefault();  /* prevent default action for event */
 
