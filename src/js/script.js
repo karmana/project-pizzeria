@@ -88,6 +88,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion(){ // tworze metode initAccordion 
@@ -163,7 +164,7 @@
           /* 2. czy w tablicy zapisnej pod tym kluczem znajduje sie klucz opcji */
           /* jesli 1 i 2 sa prawdziwe to znaczy ze opcja jest zaznaczona */  
            const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
-           console.log('Selected?', optionSelected);
+           //console.log('Selected?', optionSelected);
 
             if(optionSelected){
                 // sprawdzam czy opcja nie jest domyslna 
@@ -172,13 +173,26 @@
                  price += option.price;
                }
               }
-               else{
-                 //sprawdzam czy opcja jest domyslna
+            else{
+                //sprawdzam czy opcja jest domyslna
                 if(option.default == true){
                   price -= option.price;
                 }
                }
+            
+            /* dodaje czesc odpowiedzialna za obsluge obrazkow */ 
+               //szukam obrazka w divie z obrazkami
+               const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+               console.log(thisProduct.imageWrapper);
 
+              if(optionImage){
+                if(optionSelected){
+                optionImage.classList.add(classNames.menuProduct.imageVisible);
+              }
+              else{
+                optionImage.classList.remove(classNames.menuProduct.imageVisible);
+              }
+            }
             }
 
         }
