@@ -139,7 +139,7 @@
     processOrder(){ // tworze metode processOrder
       const thisProduct = this;
 
-      // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
+    // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData', formData);
 
@@ -156,10 +156,33 @@
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          console.log(optionId, option);
-        }
-      }
+          console.log('option', optionId, option);
+              
+          /* weryfikacja czy dana opcja jest zaznaczona */
+          /* 1. czy obiekt formData zawiera wlasciwosc o klczu takim jak klucz parametru (powinien)  */
+          /* 2. czy w tablicy zapisnej pod tym kluczem znajduje sie klucz opcji */
+          /* jesli 1 i 2 sa prawdziwe to znaczy ze opcja jest zaznaczona */  
+           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+           console.log('Selected?', optionSelected);
 
+            if(optionSelected){
+                // sprawdzam czy opcja nie jest domyslna 
+               if(!option.default == true){
+                 //dodaje cene opcji do zmiennej price
+                 price += option.price;
+               }
+              }
+               else{
+                 //sprawdzam czy opcja jest domyslna
+                if(option.default == true){
+                  price -= option.price;
+                }
+               }
+
+            }
+
+        }
+      
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
 
