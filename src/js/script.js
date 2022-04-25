@@ -43,7 +43,7 @@
   const settings = {
     amountWidget: {
       defaultValue: 1,
-      defaultMin: 1,
+      defaultMin: 0,
       defaultMax: 10,
     }
   };
@@ -197,6 +197,9 @@
             }
             }
         }
+      /* multiply price by amount */
+      price *= thisProduct.amountWidget.value; 
+
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
     }
@@ -205,6 +208,9 @@
       const thisProduct = this;
 
       thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisProduct.processOrder(); //po wykryciu eventu updated zostanie uruchomiona metoda processOrder
+      });
     }
   }
 
@@ -212,7 +218,7 @@
     constuctor(element){
       const thisWidget = this;
       thisWidget.getElements(element);
-      thisWidget.setValue(thisWidget.input.value);
+      thisWidget.setValue(thisWidget.input.value); // dzieki temu na starcie instancja ma juz info co jest w inpucie, przez zmianami jakie wprowadzi uzytkownik 
       thisWidget.initActions();
 
       console.log('AmountWidget:', thisWidget);
@@ -226,6 +232,7 @@
       thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
       thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
       thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+      thisWidget.value = settings.amountWidget.defaultValue;
     }
 
     setValue(value){
@@ -245,7 +252,7 @@
       
       thisWidget.value = newValue; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
       
-      thisWidget.announce() // wywoluje metode announce
+      thisWidget.announce(); // wywoluje metode announce
 
       thisWidget.input.value = thisWidget.value; //aktualizuje wartosc inputu
 
