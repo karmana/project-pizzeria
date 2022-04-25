@@ -63,6 +63,7 @@
       thisProduct.getElements();
       thisProduct.initAccordion(); 
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder(); 
 
       console.log('new Product:', thisProduct);
@@ -89,6 +90,7 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAccordion(){ // tworze metode initAccordion 
@@ -133,7 +135,7 @@
         thisProduct.processOrder();
       });
 
-      console.log('initOrderForm');
+      //console.log('initOrderForm');
 
     }
 
@@ -142,7 +144,7 @@
 
     // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      //console.log('formData', formData);
 
       // set price to default price
       let price = thisProduct.data.price;
@@ -151,13 +153,13 @@
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
+       //console.log(paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          console.log('option', optionId, option);
+          //console.log('option', optionId, option);
               
           /* weryfikacja czy dana opcja jest zaznaczona */
           /* 1. czy obiekt formData zawiera wlasciwosc o klczu takim jak klucz parametru (powinien)  */
@@ -183,7 +185,7 @@
             /* dodaje czesc odpowiedzialna za obsluge obrazkow */ 
                //szukam obrazka w divie z obrazkami
                const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
-               console.log(thisProduct.imageWrapper);
+               //console.log(thisProduct.imageWrapper);
 
               if(optionImage){
                 if(optionSelected){
@@ -194,21 +196,76 @@
               }
             }
             }
-
         }
-      
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
+    }
+
+    initAmountWidget(){
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+    }
+  }
+
+  class AmountWidget{
+    constuctor(element){
+      const thisWidget = this;
+      thisWidget.getElements(element);
+      thisWidget.setValue(thisWidget.input.value);
+      thisWidget.initActions();
+
+      console.log('AmountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
+    }
+
+    getElements(element){
+      const thisWidget = this;
+    
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value){
+      const thisWidget = this;
+
+      const newValue = parseInt(value); // konwertuje wartosc na liczbe calkowita !! bo kazdy input, nawet o typie number zwraca wrtosc w formiacie tekstowym
+
+      if(thisWidget.value !== newValue && !isNaN(newValue)){
+        thisWidget.value = newValue;
+      }
+
+      thisWidget.value = value; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
+      thisWidget.input.value = thisWidget.value; //aktualizuje wartosc inputu
 
     }
 
+    initActions(){
+      const thisWidget = this;
 
+      thisWidget.input.addEventListener('change', function(){
+        thisWidget.setValue(thisWidget.input);
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function(event){
+        event.preventDefault();
+        thisWidget.setValue(--thisWidget.value) 
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function(event){
+        event.preventDefault();
+        thisWidget.setValue(++thisWidget.value) 
+      });
+
+  }
   }
 
   const app = {
     initMenu: function(){ //metoda wywolywana po iniData, bo korzysta z przygotowanej wczesniej referencji do danych (thisApp.data)
       const thisApp = this;
-      console.log('thisAppData:', thisApp.data);
+     // console.log('thisAppData:', thisApp.data);
 
       for(let productData in thisApp.data.products){; //jej zadaniem jest przejscie po wszystkich obiektach produktow z thisApp.data.products i utworzenie dla kazdego z nich instacji klasy Product
         new Product(productData, thisApp.data.products[productData]);
