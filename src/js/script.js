@@ -44,7 +44,7 @@
     amountWidget: {
       defaultValue: 1,
       defaultMin: 1,
-      defaultMax: 9,
+      defaultMax: 10,
     }
   };
 
@@ -233,11 +233,20 @@
 
       const newValue = parseInt(value); // konwertuje wartosc na liczbe calkowita !! bo kazdy input, nawet o typie number zwraca wrtosc w formiacie tekstowym
 
-      if(thisWidget.value !== newValue && !isNaN(newValue)){
+      if(
+        thisWidget.value !== newValue 
+        && !isNaN(newValue)
+        && newValue >= settings.amountWidget.defaultMin
+        && newValue <= settings.amountWidget.defaultMax
+        ){
+        
         thisWidget.value = newValue;
       }
+      
+      thisWidget.value = newValue; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
+      
+      thisWidget.announce() // wywoluje metode announce
 
-      thisWidget.value = value; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
       thisWidget.input.value = thisWidget.value; //aktualizuje wartosc inputu
 
     }
@@ -259,7 +268,15 @@
         thisWidget.setValue(++thisWidget.value) 
       });
 
-  }
+    }
+
+    announce(){
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
+
   }
 
   const app = {
