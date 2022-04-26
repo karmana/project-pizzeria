@@ -110,6 +110,8 @@
     getElements(){ // tworze metode getElements, ktora szuka elementow w konterze produktu -> by nie wyszukiwac tych samych elementow wielokrotnie
       const thisProduct = this;
 
+     // TO DO: EXERCISE - ADD .dom TO PRODUCT thisProduct.dom = {};
+
       thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
@@ -311,6 +313,38 @@
 
   }
 
+  class Cart{
+    constructor(element){
+      const thisCart = this;
+
+      thisCart.products = []; //tworze tablice w ktorej bede przechowywac produkty dodane do koszyka
+
+      thisCart.getElements(element);
+      thisCart.initActions();
+
+      console.log('newCart', thisCart);
+    }
+
+    getElements(element){
+      const thisCart = this;
+
+      thisCart.dom = {};
+
+      thisCart.dom.wrapper = element;
+      thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+    }
+
+    initActions(){
+     const thisCart = this;
+       
+     thisCart.dom.toggleTrigger.addEventListener('click', function(event){
+       event.preventDefault(); 
+       
+       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+      });
+    }
+  }
+
   const app = {
     initMenu: function(){ //metoda wywolywana po iniData, bo korzysta z przygotowanej wczesniej referencji do danych (thisApp.data)
       const thisApp = this;
@@ -327,6 +361,13 @@
       thisApp.data = dataSource; //referencja do dataSource, danych z ktorych korzystamy, znajduje sie tam m.in. products ze struktura produktow
     },
 
+    initCart: function(){
+      const thisApp = this;
+
+      const cartElem = document.querySelector(select.containerOf.cart);
+      thisApp.cart = new Cart(cartElem);
+    },
+
     init: function(){
       const thisApp = this;
       console.log('*** App starting ***');
@@ -337,6 +378,7 @@
 
       thisApp.initData();
       thisApp.initMenu();
+      thisApp.initCart();
     },
   };
 
