@@ -215,7 +215,7 @@
   }
 
   class AmountWidget{
-    constuctor(element){
+    constructor(element){
       const thisWidget = this;
       thisWidget.getElements(element);
       thisWidget.setValue(thisWidget.input.value); // dzieki temu na starcie instancja ma juz info co jest w inpucie, przez zmianami jakie wprowadzi uzytkownik 
@@ -247,10 +247,9 @@
         && newValue <= settings.amountWidget.defaultMax
         ){
         
-        thisWidget.value = newValue;
-      }
+        thisWidget.value = newValue; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
       
-      thisWidget.value = newValue; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
+      }
       
       thisWidget.announce(); // wywoluje metode announce
 
@@ -267,12 +266,12 @@
 
       thisWidget.linkDecrease.addEventListener('click', function(event){
         event.preventDefault();
-        thisWidget.setValue(--thisWidget.value) 
+        thisWidget.setValue(thisWidget.value - 1) 
       });
 
       thisWidget.linkIncrease.addEventListener('click', function(event){
         event.preventDefault();
-        thisWidget.setValue(++thisWidget.value) 
+        thisWidget.setValue(thisWidget.value + 1) 
       });
 
     }
