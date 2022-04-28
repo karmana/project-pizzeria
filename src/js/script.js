@@ -390,6 +390,10 @@
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
       thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
+      thisCart.dom.deliveryFee = thisCart.dom.wrapper.querySelector(select.cart.deliveryFee);
+      thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
+      thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
+      thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
     }
 
     initActions(){
@@ -421,44 +425,48 @@
 
     update(){
       const thisCart = this;
-      
+    
       const deliveryFee = settings.cart.defaultDeliveryFee;
-      const totalNumber = 0;
-      const subtotalPrice = 0;
+      thisCart.totalNumber = 0; //calkowita liczba sztuk
+      thisCart.subtotalPrice = 0; //zsumowana cena za wszystko, bez kosztow dostawy
 
       for(let product of thisCart.products){ // petla przechodzi po thisCart.products
 
-        thisCart.totalNumber = product.amount + thisCart.totalNumber  //zwieksza totalNumber o liczbe sztuk danego produktu
-        thisCart.subtotalPrice = product.priceSingle * thisCart.totalNumber//zwieksza subtotalPrice o jego cena calkowita (wlasciwosc price)
-    
+        thisCart.totalNumber = product.amount + thisCart.totalNumber;  //zwieksza totalNumber o liczbe sztuk danego produktu
+        
+        thisCart.subtotalPrice = product.price + thisCart.subtotalPrice;//zwieksza subtotalPrice o jego cena calkowita (wlasciwosc price)
       }
-     
-      if (thisCart.totalNumber = 0){ //jesli nie ma nic w koszyku nie ma kosztow dostawy, cena koncowa =0
-          thisCart.deliveryFee = 0;
+
+      
+      thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
+      thisCart.totalPrice = deliveryFee + thisCart.subtotalPrice;
+    
+      
+      if (thisCart.totalNumber == 0){ //jesli nie ma nic w koszyku nie ma kosztow dostawy, cena koncowa =0
+          thisCart.deliveryFee == 0;
+          thisCart.subtotalPrice == 0;
         }
       else{
         thisCart.totalPrice = deliveryFee + thisCart.subtotalPrice;
+        
       }
       
-      console.log(deliveryFee, totalNumber, subtotalPrice, 'totalPrice:', thisCart.totalPrice)
+      for(let totalPrices of thisCart.dom.totalPrice){
+        totalPrices.innerHTML = thisCart.totalPrice;
+      }
+
+      thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
+      thisCart.dom.deliveryFee.innerHTML = deliveryFee;
+      thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
+
+      console.log(deliveryFee, thisCart.totalNumber, thisCart.subtotalPrice, 'totalPrice:', thisCart.totalPrice)
     }
 
-
   }
-
 
   class CartProduct{
     constructor(menuProduct, element){ //konstruktor przyjmuje dwa argumenty, menuProduct oraz element, menuProduct przyjmuje referencje do obiektu podsumowania, element przyjumje referencje do utworzonego dla tego produktu elementu html 
       const thisCartProduct = this;
-
-      // thisCartProduct = {
-      //   id: menuProduct.id,
-      //   amount: menuProduct.amount,
-      //   name: menuProduct.name,
-      //   params: menuProduct.params,
-      //   price: menuProduct.price,
-      //   priceSingle: menuProduct.priceSingle,
-      // };
   
       thisCartProduct.id = menuProduct.id;
       thisCartProduct.amount = menuProduct.amount;
