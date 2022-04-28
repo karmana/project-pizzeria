@@ -334,7 +334,6 @@
         ){
         
         thisWidget.value = newValue; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
-      
       }
       
       thisWidget.announce(); // wywoluje metode announce
@@ -412,7 +411,7 @@
         
       thisCart.dom.productList.appendChild(generatedDOM); /* add element to menu */         
      
-      thisCart.products.push(menuProduct);
+      thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
       console.log('thisCart.products', thisCart.products);
 
       console.log('adding product', menuProduct);
@@ -441,6 +440,7 @@
       thisCartProduct.priceSingle = menuProduct.priceSingle;
       
       thisCartProduct.getElements(element);
+      thisCartProduct.initAmountWidget();
       
       console.log('thisCartProduct', thisCartProduct);
     }
@@ -455,6 +455,20 @@
       thisCartProduct.dom.edit = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.edit);
       thisCartProduct.dom.remove = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.remove);
     }
+
+    initAmountWidget(){
+      const thisCartProduct = this;
+
+      thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
+      thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
+        
+          thisCartProduct.amount = thisCartProduct.amountWidget.value;
+          thisCartProduct.price = thisCartProduct.amountWidget.value * thisCartProduct.priceSingle;
+          thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
+      
+      });
+    }
+
   }
 
   const app = {
