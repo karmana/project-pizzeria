@@ -92,7 +92,7 @@
       thisProduct.initAmountWidget();
       thisProduct.processOrder(); 
 
-      console.log('new Product:', thisProduct);
+      //console.log('new Product:', thisProduct);
     }
     renderInMenu(){ //metoda, ktora renderuje, czyli tworzy produkty na stronie
       const thisProduct = this;
@@ -307,8 +307,8 @@
       thisWidget.setValue(thisWidget.input.value); // dzieki temu na starcie instancja ma juz info co jest w inpucie, przez zmianami jakie wprowadzi uzytkownik 
       thisWidget.initActions();
 
-      console.log('AmountWidget:', thisWidget);
-      console.log('constructor arguments:', element);
+      //console.log('AmountWidget:', thisWidget);
+      //console.log('constructor arguments:', element);
     }
 
     getElements(element){
@@ -415,7 +415,35 @@
       console.log('thisCart.products', thisCart.products);
 
       console.log('adding product', menuProduct);
+
+      thisCart.update();
     }
+
+    update(){
+      const thisCart = this;
+      
+      const deliveryFee = settings.cart.defaultDeliveryFee;
+      const totalNumber = 0;
+      const subtotalPrice = 0;
+
+      for(let product of thisCart.products){ // petla przechodzi po thisCart.products
+
+        thisCart.totalNumber = product.amount + thisCart.totalNumber  //zwieksza totalNumber o liczbe sztuk danego produktu
+        thisCart.subtotalPrice = product.priceSingle * thisCart.totalNumber//zwieksza subtotalPrice o jego cena calkowita (wlasciwosc price)
+    
+      }
+     
+      if (thisCart.totalNumber = 0){ //jesli nie ma nic w koszyku nie ma kosztow dostawy, cena koncowa =0
+          thisCart.deliveryFee = 0;
+        }
+      else{
+        thisCart.totalPrice = deliveryFee + thisCart.subtotalPrice;
+      }
+      
+      console.log(deliveryFee, totalNumber, subtotalPrice, 'totalPrice:', thisCart.totalPrice)
+    }
+
+
   }
 
 
