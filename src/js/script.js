@@ -410,6 +410,10 @@
       thisCart.dom.productList.addEventListener('updated', function(){ //nasluchujemy na liste produktow, w ktorej umiesczamy produkty, w ktorych znajduje sie widget liczby sztuk, ktory generuje ten event
         thisCart.update();
       });
+
+      thisCart.dom.productList.addEventListener('remove', function(event){
+        thisCart.remove(event);
+      })
     }
 
     add(menuProduct){
@@ -464,6 +468,19 @@
       thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
 
       console.log(deliveryFee, thisCart.totalNumber, thisCart.subtotalPrice, 'totalPrice:', thisCart.totalPrice)
+    }
+
+    remove(event){ 
+      const thisCart = this;
+      // usuwam informacje o danym produkcie z tablicy thisCart.products
+      const removedProduct = thisCart.products.indexOf(event.detail.cartProduct);
+      thisCart.products.splice(removedProduct, 1);
+  
+      console.log('removed:', removedProduct);
+    
+      // wywoluje metode update w celu przeliczenia sum po usunieciu produktu
+      thisCart.update();
+
     }
 
   }
@@ -521,6 +538,7 @@
       });
 
       thisCartProduct.dom.wrapper.dispatchEvent(event);
+      thisCartProduct.dom.wrapper.remove(); //usuwam reprezentacje produktu z html'a - po kliknieciu remove w koszyku 
 
     }
 
