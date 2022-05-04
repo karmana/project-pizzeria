@@ -71,6 +71,11 @@
     cart: {
       defaultDeliveryFee: 20,
     },
+    db: {
+      url: '//localhost:3131',
+      products: 'products',
+      orders: 'orders',
+    },
   };
 
   const templates = {
@@ -105,12 +110,12 @@
       const menuContainer = document.querySelector(select.containerOf.menu);/* find menu container */
       
       menuContainer.appendChild(thisProduct.element); /* add element to menu */ //metoda appendChild dodaje stworzony element fo menu
-      }
+    }
    
     getElements(){ // tworze metode getElements, ktora szuka elementow w konterze produktu -> by nie wyszukiwac tych samych elementow wielokrotnie
       const thisProduct = this;
 
-     // TO DO: EXERCISE - ADD .dom TO PRODUCT thisProduct.dom = {};
+      // TO DO: EXERCISE - ADD .dom TO PRODUCT thisProduct.dom = {};
 
       thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
@@ -130,17 +135,17 @@
       
       thisProduct.accordionTrigger.addEventListener('click', function(event) { /* START: add event listener to clickable trigger on event click */
       
-      event.preventDefault();  /* prevent default action for event */
+        event.preventDefault();  /* prevent default action for event */
 
         const activeProduct = document.querySelector(select.all.menuProductsActive); /* find active product (product that has active class) */
         //console.log('active produts:', activeProduct);
 
         if(activeProduct != null && thisProduct.element) {  /* if there is active product and it's not thisProduct.element, remove class active from it */
           activeProduct.classList.remove('active'); /* != null sprawdza czy element DOM udalo sie znalezc, !=thisProduct.element - sprawdza czy aktywny produkt jest rozny od elementu biezacego */
-          }
+        }
   
         thisProduct.element.classList.toggle('active');    /* toggle active class on thisProduct.element */  /* toogle - jesli danej klasy nie ma - dodaje, jesli jest - zabiera */                                          
-    });
+      });
 
     }
 
@@ -171,7 +176,7 @@
     processOrder(){ // tworze metode processOrder
       const thisProduct = this;
 
-    // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
+      // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
       //console.log('formData', formData);
 
@@ -182,7 +187,7 @@
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-       //console.log(paramId, param);
+        //console.log(paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
@@ -194,38 +199,38 @@
           /* 1. czy obiekt formData zawiera wlasciwosc o klczu takim jak klucz parametru (powinien)  */
           /* 2. czy w tablicy zapisnej pod tym kluczem znajduje sie klucz opcji */
           /* jesli 1 i 2 sa prawdziwe to znaczy ze opcja jest zaznaczona */  
-           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
-           //console.log('Selected?', optionSelected);
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+          //console.log('Selected?', optionSelected);
 
-            if(optionSelected){
-                // sprawdzam czy opcja nie jest domyslna 
-               if(!option.default == true){
-                 //dodaje cene opcji do zmiennej price
-                 price += option.price;
-               }
-              }
-            else{
-                //sprawdzam czy opcja jest domyslna
-                if(option.default == true){
-                  price -= option.price;
-                }
-               }
+          if(optionSelected){
+            // sprawdzam czy opcja nie jest domyslna 
+            if(!option.default == true){
+              //dodaje cene opcji do zmiennej price
+              price += option.price;
+            }
+          }
+          else{
+            //sprawdzam czy opcja jest domyslna
+            if(option.default == true){
+              price -= option.price;
+            }
+          }
             
-            /* dodaje czesc odpowiedzialna za obsluge obrazkow */ 
-               //szukam obrazka w divie z obrazkami
-               const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
-               //console.log(thisProduct.imageWrapper);
+          /* dodaje czesc odpowiedzialna za obsluge obrazkow */ 
+          //szukam obrazka w divie z obrazkami
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          //console.log(thisProduct.imageWrapper);
 
-              if(optionImage){
-                if(optionSelected){
-                optionImage.classList.add(classNames.menuProduct.imageVisible);
-              }
-              else{
-                optionImage.classList.remove(classNames.menuProduct.imageVisible);
-              }
+          if(optionImage){
+            if(optionSelected){
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
             }
+            else{
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
             }
+          }
         }
+      }
 
       thisProduct.priceSingle = price; //zapisuje nowa wlasciwosc z cena jednostokowa wybranej opcji
       
@@ -274,30 +279,30 @@
       //tworze nowy obiekt, w ktorym bede przechowywac wybor uzytkownika
       const params = {};
 
-        // for every category (param)...
-        for(let paramId in thisProduct.data.params) {
-          // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
-          const param = thisProduct.data.params[paramId];
+      // for every category (param)...
+      for(let paramId in thisProduct.data.params) {
+        // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
+        const param = thisProduct.data.params[paramId];
 
-          // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
-          params[paramId] = {
-            label: param.label,
-            options: {}
-          }
+        // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
+        params[paramId] = {
+          label: param.label,
+          options: {}
+        };
         
-          // for every option in this category
-          for(let optionId in param.options) {
-            const option = param.options[optionId];
-            const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+        // for every option in this category
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
 
-              if(optionSelected){
-                params[paramId].options[optionId] = option.label;
-                }
-              }
+          if(optionSelected){
+            params[paramId].options[optionId] = option.label;
           }
-        return params;
-        
+        }
       }
+      return params;
+        
+    }
   }
 
   class AmountWidget{
@@ -331,7 +336,7 @@
         && !isNaN(newValue)
         && newValue >= settings.amountWidget.defaultMin
         && newValue <= settings.amountWidget.defaultMax
-        ){
+      ){
         
         thisWidget.value = newValue; // zapisuje we wlasciwosci thisWidget.value wartosc przekazanego argumentu
       }
@@ -351,12 +356,12 @@
 
       thisWidget.linkDecrease.addEventListener('click', function(event){
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value - 1) 
+        thisWidget.setValue(thisWidget.value - 1);
       });
 
       thisWidget.linkIncrease.addEventListener('click', function(event){
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value + 1) 
+        thisWidget.setValue(thisWidget.value + 1);
       });
 
     }
@@ -399,12 +404,12 @@
     }
 
     initActions(){
-     const thisCart = this;
+      const thisCart = this;
 
-     thisCart.dom.toggleTrigger.addEventListener('click', function(event){
-       event.preventDefault(); 
+      thisCart.dom.toggleTrigger.addEventListener('click', function(event){
+        event.preventDefault(); 
        
-       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+        thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
 
       thisCart.dom.productList.addEventListener('updated', function(){ //nasluchujemy na liste produktow, w ktorej umiesczamy produkty, w ktorych znajduje sie widget liczby sztuk, ktory generuje ten event
@@ -413,7 +418,7 @@
 
       thisCart.dom.productList.addEventListener('remove', function(event){
         thisCart.remove(event);
-      })
+      });
     }
 
     add(menuProduct){
@@ -448,27 +453,27 @@
         thisCart.subtotalPrice = product.price + thisCart.subtotalPrice;//zwieksza subtotalPrice o jego cena calkowita (wlasciwosc price)
       }
 
-        if (thisCart.totalNumber == 0){ //jesli nie ma nic w koszyku nie ma kosztow dostawy, cena koncowa =0
-          thisCart.deliveryFee == 0;
-          thisCart.subtotalPrice == 0;
-          thisCart.totalPrice == 0;
-        }
-        else{
-          thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
-        }
+      if (thisCart.totalNumber == 0){ //jesli nie ma nic w koszyku nie ma kosztow dostawy, cena koncowa =0
+        thisCart.deliveryFee == 0;
+        thisCart.subtotalPrice == 0;
+        thisCart.totalPrice == 0;
+      }
+      else{
+        thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
+      }
 
-        for(let totalPrices of thisCart.dom.totalPrice){
-          thisCart.totalPrice = thisCart.deliveryFee + thisCart.subtotalPrice;
-          totalPrices.innerHTML = thisCart.totalPrice;
-        }
+      for(let totalPrices of thisCart.dom.totalPrice){
+        thisCart.totalPrice = thisCart.deliveryFee + thisCart.subtotalPrice;
+        totalPrices.innerHTML = thisCart.totalPrice;
+      }
       
-        thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
-        thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
-        thisCart.dom.deliveryFee.innerHTML = thisCart.deliveryFee;
-        thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
+      thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
+      thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
+      thisCart.dom.deliveryFee.innerHTML = thisCart.deliveryFee;
+      thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
         
-        
-      console.log(thisCart.deliveryFee, thisCart.totalNumber, thisCart.subtotalPrice, 'totalPrice:', thisCart.totalPrice)
+
+      console.log(thisCart.deliveryFee, thisCart.totalNumber, thisCart.subtotalPrice, 'totalPrice:', thisCart.totalPrice);
     }
 
     remove(event){ 
@@ -519,9 +524,9 @@
       thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
       thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
         
-          thisCartProduct.amount = thisCartProduct.amountWidget.value;
-          thisCartProduct.price = thisCartProduct.amountWidget.value * thisCartProduct.priceSingle;
-          thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
+        thisCartProduct.amount = thisCartProduct.amountWidget.value;
+        thisCartProduct.price = thisCartProduct.amountWidget.value * thisCartProduct.priceSingle;
+        thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
       
       });
     }
@@ -551,7 +556,7 @@
       thisCartProduct.dom.remove.addEventListener('click', function(event){
         event.preventDefault();
         thisCartProduct.remove();
-      })
+      });
     }
 
   }
@@ -559,17 +564,35 @@
   const app = {
     initMenu: function(){ //metoda wywolywana po iniData, bo korzysta z przygotowanej wczesniej referencji do danych (thisApp.data)
       const thisApp = this;
-     // console.log('thisAppData:', thisApp.data);
-
-      for(let productData in thisApp.data.products){; //jej zadaniem jest przejscie po wszystkich obiektach produktow z thisApp.data.products i utworzenie dla kazdego z nich instacji klasy Product
-        new Product(productData, thisApp.data.products[productData]);
+      
+      for(let productData in thisApp.data.products){ //jej zadaniem jest przejscie po wszystkich obiektach produktow z thisApp.data.products i utworzenie dla kazdego z nich instacji klasy Product
+        //new Product(productData, thisApp.data.products[productData]);
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       } 
     },
     
     initData: function(){ //przugotowuje latwy dostep do danych, przypisuje do app.data (wlasciwosci calego obiketu app) referencje do dataSource
       const thisApp = this;
 
-      thisApp.data = dataSource; //referencja do dataSource, danych z ktorych korzystamy, znajduje sie tam m.in. products ze struktura produktow
+      //thisApp.data = dataSource; //referencja do dataSource, danych z ktorych korzystamy, znajduje sie tam m.in. products ze struktura produktow
+      thisApp.data = {};
+      const url = settings.db.url + '/' + settings.db.products;
+
+      fetch(url)
+        .then(function(rawResponse){
+          return rawResponse.json();
+        })
+        .then(function(parsedResponse){
+          console.log('parsedResponse', parsedResponse);
+
+          /* save parsedResponse as thisApp.data.products */
+          thisApp.data.products = parsedResponse;
+
+          /* execute initMenu method */
+          thisApp.initMenu();
+
+        });
+        console.log('thisApp.data', JSON.stringify(thisApp.data));
     },
 
     initCart: function(){
@@ -588,7 +611,7 @@
       console.log('templates:', templates);
 
       thisApp.initData();
-      thisApp.initMenu();
+      //thisApp.initMenu();
       thisApp.initCart();
     
     },
