@@ -435,39 +435,40 @@
 
     update(){
       const thisCart = this;
-      const deliveryFee = settings.cart.defaultDeliveryFee;
+      
 
       thisCart.totalNumber = 0; //calkowita liczba sztuk
       thisCart.subtotalPrice = 0; //zsumowana cena za wszystko, bez kosztow dostawy
+      thisCart.deliveryFee = 0;
 
       for(let product of thisCart.products){ // petla przechodzi po thisCart.products
 
         thisCart.totalNumber = product.amount + thisCart.totalNumber;  //zwieksza totalNumber o liczbe sztuk danego produktu
-        thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
         
         thisCart.subtotalPrice = product.price + thisCart.subtotalPrice;//zwieksza subtotalPrice o jego cena calkowita (wlasciwosc price)
       }
 
-      thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
-      thisCart.totalPrice = deliveryFee + thisCart.subtotalPrice;
-    
-      if (thisCart.totalNumber == 0){ //jesli nie ma nic w koszyku nie ma kosztow dostawy, cena koncowa =0
+        if (thisCart.totalNumber == 0){ //jesli nie ma nic w koszyku nie ma kosztow dostawy, cena koncowa =0
           thisCart.deliveryFee == 0;
           thisCart.subtotalPrice == 0;
           thisCart.totalPrice == 0;
         }
-      else{
-        thisCart.totalPrice = deliveryFee + thisCart.subtotalPrice;
-      }
+        else{
+          thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
+        }
+
+        for(let totalPrices of thisCart.dom.totalPrice){
+          thisCart.totalPrice = thisCart.deliveryFee + thisCart.subtotalPrice;
+          totalPrices.innerHTML = thisCart.totalPrice;
+        }
       
-      for(let totalPrices of thisCart.dom.totalPrice){
-        totalPrices.innerHTML = thisCart.totalPrice;
-      }
-
-      thisCart.dom.deliveryFee.innerHTML = deliveryFee;
-      thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
-
-      console.log(deliveryFee, thisCart.totalNumber, thisCart.subtotalPrice, 'totalPrice:', thisCart.totalPrice)
+        thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
+        thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
+        thisCart.dom.deliveryFee.innerHTML = thisCart.deliveryFee;
+        thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
+        
+        
+      console.log(thisCart.deliveryFee, thisCart.totalNumber, thisCart.subtotalPrice, 'totalPrice:', thisCart.totalPrice)
     }
 
     remove(event){ 
@@ -476,8 +477,6 @@
       const removedProduct = thisCart.products.indexOf(event.detail.cartProduct);
       thisCart.products.splice(removedProduct, 1);
   
-      console.log('removed:', removedProduct);
-    
       // wywoluje metode update w celu przeliczenia sum po usunieciu produktu
       thisCart.update();
 
