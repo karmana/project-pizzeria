@@ -401,6 +401,10 @@
       thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
       thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
       thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
+      thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
+      thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
+      thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
+
     }
 
     initActions(){
@@ -418,6 +422,12 @@
 
       thisCart.dom.productList.addEventListener('remove', function(event){
         thisCart.remove(event);
+      });
+
+      thisCart.dom.form.addEventListener('submit', function(event){
+        event.preventDefault();
+       
+        thisCart.sendOrder();
       });
     }
 
@@ -487,7 +497,48 @@
 
     }
 
+    sendOrder(){
+      const thisCart = this;
+
+      const url = settings.db.url + '/' + settings.db.orders;
+
+      const payload = {};
+
+      payload.address = thisCart.dom.address.value;
+      payload.phone = thisCart.dom.phone.value;
+      payload.totalPrice = thisCart.totalPrice;
+      payload.subtotalPrice = thisCart.subtotalPrice;
+      payload.totalNumber = thisCart.totalNumber;
+      payload.deliveryFee = thisCart.deliveryFee;
+      payload.products = [];
+
+      for(let prod of thisCart.products) {
+        payload.products.push(prod.getData());
+      }
+    
+      console.log('payload:', payload);
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      };
+
+      fetch(url, options);
+
+      /* nie potrzebujemy, ale jesli bysmy chcieli, w przypadku sukcesu json-server powinien zwrocic obiekt dodany do bazy 
+      fetch(url, options)
+        .then(function(response){
+          return response.json();
+        }).then(function(parsedResponse){
+          console.log('parsedResponse', parsedResponse);
+        });
+      */
+    }    
   }
+
 
   class CartProduct{
     constructor(menuProduct, element){ //konstruktor przyjmuje dwa argumenty, menuProduct oraz element, menuProduct przyjmuje referencje do obiektu podsumowania, element przyjumje referencje do utworzonego dla tego produktu elementu html 
@@ -557,6 +608,21 @@
         event.preventDefault();
         thisCartProduct.remove();
       });
+    }
+
+    getData(){
+      const thisCartProduct = this;
+
+      const cartSummary = {};
+      
+      cartSummary.id = thisCartProduct.id,
+      cartSummary.name = thisCartProduct.name,
+      cartSummary.amount = thisCartProduct.amountWidget.value,
+      cartSummary.priceSingle = thisCartProduct.priceSingle,
+      cartSummary.price = thisCartProduct.price,
+      cartSummary.params = thisCartProduct.params;
+      
+      return cartSummary;
     }
 
   }
