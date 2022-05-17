@@ -1,6 +1,7 @@
 import {settings, select, classNames} from './settings.js'; //importuj obiekty settings,select itd. z pliku ./settings.js
 import Product from './components/Product.js'; //bez {}, nawiasow uzywamy wtedy kiedy importujemy wiecej niz 1 obiekt, product.js importujemy jako domyslny, moze byc bez {}
 import Cart from './components/Cart.js';
+import Booking from './components/Booking.js';
 
 const app = {
   initPages: function(){
@@ -86,7 +87,7 @@ const app = {
         return rawResponse.json();
       })
       .then(function(parsedResponse){
-        console.log('parsedResponse', parsedResponse);
+        //console.log('parsedResponse', parsedResponse);
 
         /* save parsedResponse as thisApp.data.products */
         thisApp.data.products = parsedResponse;
@@ -95,7 +96,7 @@ const app = {
         thisApp.initMenu();
 
       });
-    console.log('thisApp.data', JSON.stringify(thisApp.data));
+    // console.log('thisApp.data', JSON.stringify(thisApp.data));
   },
 
   initCart: function(){
@@ -111,6 +112,14 @@ const app = {
     });
   },
 
+  initBooking: function(){
+    const thisApp = this;
+    
+    const widgetBooking = document.querySelector(select.containerOf.booking);
+    thisApp.bookingElem = new Booking (widgetBooking);
+    
+  },
+
   init: function(){
     const thisApp = this;
     // console.log('*** App starting ***');
@@ -123,8 +132,10 @@ const app = {
     thisApp.initData();
     //thisApp.initMenu();
     thisApp.initCart();
+    thisApp.initBooking();
     
   },
+
 };
 
 app.init();
