@@ -1,8 +1,70 @@
-import {settings, select, classNames, templates} from './settings.js'; //importuj obiekty settings,select itd. z pliku ./settings.js
+import {settings, select, classNames} from './settings.js'; //importuj obiekty settings,select itd. z pliku ./settings.js
 import Product from './components/Product.js'; //bez {}, nawiasow uzywamy wtedy kiedy importujemy wiecej niz 1 obiekt, product.js importujemy jako domyslny, moze byc bez {}
 import Cart from './components/Cart.js';
 
 const app = {
+  initPages: function(){
+    const thisApp = this;
+
+    thisApp.pages = document.querySelector(select.containerOf.pages).children; //tworzymy wlasciwosc, w ktorej bedziemy przechowywac wszystkie kontenery podstron (w kontenerze pages), wlasciwosc children - dzieki niej we wlasciwosci pages znajda sie wszystkie dzieci kontenra pages (sekcka order i booking)
+    thisApp.navLinks = document.querySelectorAll(select.nav.links); //ten selekstor wyszukuje wszystkie linki, dlatego nie stosujemy children
+
+    //thisApp.activatePage(thisApp.pages[0].id); //metodzie przekazujemu informacje, ktora strona ma byc aktywowana, przekazujemy id kontenera - id pierwszej ze stron znalezionej i zapisanej w thisApp.pages
+
+    const idFromHash = window.location.hash.replace('#/','');
+
+    let pageMatchingHash = thisApp.pages[0].id;
+
+    for(let page of thisApp.pages){
+      if(page.id == idFromHash){
+        pageMatchingHash = page.id;
+        break;
+      }
+    }
+  
+    thisApp.activatePage(pageMatchingHash);
+    
+    for(let link of thisApp.navLinks){
+      link.addEventListener('click', function(event){
+        const clickedElement = this;
+        event.preventDefault();
+
+        /* get page id from href attribute */
+        const id = clickedElement.getAttribute('href').replace('#', ''); //w stalej id zapisujemy atrybut hre kliknietego elementu, w ktorym zamienimy # na pusty ciag znakow - zamieniajac to pozostanie nam tekst ktory jest o tym znaku, czyli order lub bookind odpowiadajce id strony 
+
+        /* run thisApp.activatePage with that id */
+        thisApp.activatePage(id);
+
+        /* change URL hash */
+        window.location.hash = '#/' + id; //dodajemy / po # zeby uniknac domyslnego zachowania przegladarki - przewiniecia strony do elementu o tej samej nazwie (#order) co link (#order)
+      });
+    }
+
+  },
+
+  activatePage: function(pageId){ //metoda, bedaca funkcja przyjmujaca jeden argument pageId
+    const thisApp = this;
+
+    /* add class "active" to matching pages, remove from non-matching */
+    for(let page of thisApp.pages){
+      // if(page.id == pageId){
+      //   page.classList.add(classNames.pages.active);
+      // } else {
+      //   page.classList.remove(classNames.pages.active);
+      // }
+
+      page.classList.toggle(classNames.pages.active, page.id == pageId); //to samo co powyzszy kod
+    }
+
+    /* add class "active" to matching links, remove from non-matching */
+
+    for(let link of thisApp.navLinks){ //dla kazdego z linkow zapisanych w thisApp.navLinks
+      link.classList.toggle( //dodajemy lub usuwamy 
+        classNames.nav.active, //klase active 
+        link.getAttribute('href') == '#' + pageId); //w zaleznosci od tego czy atrybut href tego linka jest rowny # oraz id podstrony podanej jako argument w metodzie activatePage
+    }
+  },
+
   initMenu: function(){ //metoda wywolywana po iniData, bo korzysta z przygotowanej wczesniej referencji do danych (thisApp.data)
     const thisApp = this;
       
@@ -51,12 +113,13 @@ const app = {
 
   init: function(){
     const thisApp = this;
-    console.log('*** App starting ***');
-    console.log('thisApp:', thisApp);
-    console.log('classNames:', classNames);
-    console.log('settings:', settings);
-    console.log('templates:', templates);
-
+    // console.log('*** App starting ***');
+    // console.log('thisApp:', thisApp);
+    // console.log('classNames:', classNames);
+    // console.log('settings:', settings);
+    // console.log('templates:', templates);
+    
+    thisApp.initPages();
     thisApp.initData();
     //thisApp.initMenu();
     thisApp.initCart();
