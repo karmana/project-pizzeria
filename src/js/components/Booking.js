@@ -9,9 +9,13 @@ class Booking{
   constructor(element){
     const thisBooking = this;
 
+    thisBooking.tableChosen = '';
+
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
+    thisBooking.initTables();
+
   }
 
   getData(){
@@ -94,7 +98,7 @@ class Booking{
         }
       }
     }
-    // console.log('thisBooking.booked', thisBooking.booked);
+    console.log('thisBooking.booked', thisBooking.booked);
     thisBooking.updateDOM();
   }
 
@@ -165,29 +169,70 @@ class Booking{
     thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
-  
+    thisBooking.dom.floorPlan = thisBooking.dom.wrapper.querySelector(select.booking.floorPlan);
   } 
 
   initWidgets(){
     const thisBooking = this;
     
     thisBooking.peopleAmountWidget = new AmountWidget(thisBooking.dom.peopleAmount);
-    thisBooking.dom.peopleAmount.addEventListener('click', function(){});
-
     thisBooking.hoursAmountWidget = new AmountWidget(thisBooking.dom.hoursAmount);
-    thisBooking.dom.hoursAmount.addEventListener('click', function(){});
-
     thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
-    thisBooking.dom.datePicker.addEventListener('click', function(){});
-
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
-    thisBooking.dom.hourPicker.addEventListener('click', function(){});
 
     thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
+      thisBooking.resetTable(); 
     });
 
   }
+
+  resetTable(){
+    const thisBooking = this;
+     
+    for(let table of thisBooking.dom.tables){
+      table.classList.remove(classNames.booking.selected);
+    }
+  }
+
+  initTables(){
+    const thisBooking = this;
+
+    thisBooking.dom.floorPlan.addEventListener('click', function(event){
+      event.preventDefault();
+
+      const clickedElement = event.target;
+      const chosenTableId = clickedElement.getAttribute('data-table');
+      //   console.log('clickedElement', clickedElement);
+      //   console.log('chosenTableId', chosenTableId);
+    
+      // sprawdzam czy faktycznie kliknięto stolik i czy stolik jest wolny 
+      if(clickedElement.classList.contains('table') && !clickedElement.classList.contains('booked')){
+        //jesli tak, to sprawdzam, czy stolik nie ma nadanej klasy selected 
+        if(!clickedElement.classList.contains(classNames.booking.selected)){
+          thisBooking.resetTable(); 
+          // jesli tak to dodaje do stolika klase selected            
+          clickedElement.classList.add(classNames.booking.selected);
+          // i przypisuje numer stolika do wlasciwosci thisBooking.tableChosen
+          thisBooking.tableChosen = chosenTableId;
+        }
+        else{
+          clickedElement.classList.remove(classNames.booking.selected);
+          thisBooking.tableChosen = '';
+        }   
+      }else if (clickedElement.classList.contains('booked')){ 
+        // jesli nie pokazuje alert, z komunikatem o zajetosci stolika 
+        alert('W wybranym terminie ten stolik jest zajęty');
+      }
+    });
+
+
+
+    
+    console.log('tableChosen', thisBooking.tableChosen);
+  }
+
+
 }
 
 export default Booking;
