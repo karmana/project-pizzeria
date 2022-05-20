@@ -98,7 +98,7 @@ class Booking{
         }
       }
     }
-    console.log('thisBooking.booked', thisBooking.booked);
+    // console.log('thisBooking.booked', thisBooking.booked);
     thisBooking.updateDOM();
   }
 
@@ -180,19 +180,11 @@ class Booking{
     thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
-    thisBooking.dom.wrapper.addEventListener('updated', function(){
+    thisBooking.dom.wrapper.addEventListener('updated', function(event){
       thisBooking.updateDOM();
-      thisBooking.resetTable(); 
+      thisBooking.resetTable();
+      thisBooking.initTables(event); 
     });
-
-  }
-
-  resetTable(){
-    const thisBooking = this;
-     
-    for(let table of thisBooking.dom.tables){
-      table.classList.remove(classNames.booking.selected);
-    }
   }
 
   initTables(){
@@ -202,37 +194,45 @@ class Booking{
       event.preventDefault();
 
       const clickedElement = event.target;
-      const chosenTableId = clickedElement.getAttribute('data-table');
+      const chosenTableId = clickedElement.getAttribute(settings.booking.tableIdAttribute);
       //   console.log('clickedElement', clickedElement);
       //   console.log('chosenTableId', chosenTableId);
     
       // sprawdzam czy faktycznie kliknięto stolik i czy stolik jest wolny 
-      if(clickedElement.classList.contains('table') && !clickedElement.classList.contains('booked')){
+      if(clickedElement.classList.contains('table') && !clickedElement.classList.contains(classNames.booking.tableBooked)){
         //jesli tak, to sprawdzam, czy stolik nie ma nadanej klasy selected 
-        if(!clickedElement.classList.contains(classNames.booking.selected)){
-          thisBooking.resetTable(); 
+        if(!clickedElement.classList.contains(classNames.booking.tableSelected)){
+          thisBooking.resetTable(clickedElement); 
           // jesli tak to dodaje do stolika klase selected            
-          clickedElement.classList.add(classNames.booking.selected);
+          clickedElement.classList.add(classNames.booking.tableSelected);
+       
           // i przypisuje numer stolika do wlasciwosci thisBooking.tableChosen
           thisBooking.tableChosen = chosenTableId;
-        }
-        else{
-          clickedElement.classList.remove(classNames.booking.selected);
+        //   console.log('tableChosen', thisBooking.tableChosen);
+        } else { 
+          clickedElement.classList.remove(classNames.booking.tableSelected);
           thisBooking.tableChosen = '';
-        }   
-      }else if (clickedElement.classList.contains('booked')){ 
+        //   console.log('tableChosen', thisBooking.tableChosen);
+        }
+      }else if (clickedElement.classList.contains(classNames.booking.tableBooked)){ 
         // jesli nie pokazuje alert, z komunikatem o zajetosci stolika 
         alert('W wybranym terminie ten stolik jest zajęty');
       }
     });
-
-
-
-    
-    console.log('tableChosen', thisBooking.tableChosen);
   }
 
+  resetTable(chosenTableId){
+    const thisBooking = this;
 
+    for(let table of thisBooking.dom.tables){
+      const tableId = table.getAttribute(settings.booking.tableIdAttribute);
+      if(tableId === chosenTableId){
+        // console.log('tableId', tableId);
+      }
+      else if(table.classList.contains(classNames.booking.tableSelected))
+        table.classList.remove(classNames.booking.tableSelected);
+    }
+  }
 }
 
 export default Booking;
