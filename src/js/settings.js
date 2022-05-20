@@ -43,7 +43,11 @@ export const select = { // obiekt
     peopleAmount: '.people-amount',
     hoursAmount: '.hours-amount',
     tables: '.floor-plan .table',
-    floorPlan: '.floor-plan',
+    floorPlan: '.floor-plan', 
+    form: '.order-confirmation [type="submit"]',
+    phone: '[name="phone"]',
+    address: '[name="address"]',
+    starters: '.booking-form [name="starter"]'
   },
   nav: {
     links: '.main-nav a',
@@ -114,7 +118,6 @@ export const settings = {
     products: 'products',
     orders: 'orders',
     product: 'product',
-    order: 'order',
     booking: 'bookings',
     event: 'events',
     dateStartParamKey: 'date_gte',
