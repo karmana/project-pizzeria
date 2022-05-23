@@ -50,7 +50,7 @@ class Booking{
     };
     // console.log('getData urls', urls);
 
-    Promise.all([ //operacja ktora ma byc wykonana to zestaw operacji, ktory ma zostac wykonany
+    Promise.all([ //operacja ktora ma byc wykonana to zestaw operacji
       fetch(urls.bookings),
       fetch(urls.eventsCurrent),
       fetch(urls.eventsRepeat),
@@ -162,17 +162,24 @@ class Booking{
     thisBooking.dom.wrapper = element;
     thisBooking.dom.wrapper.innerHTML = generatedHTML;
     //element.innerHTML = generatedHTML;
-    thisBooking.dom.peopleAmount = thisBooking.dom.wrapper.querySelector(select.booking.peopleAmount);
-    thisBooking.dom.hoursAmount = thisBooking.dom.wrapper.querySelector(select.booking.hoursAmount);
+    thisBooking.dom.peopleAmount = document.querySelector(select.booking.peopleAmount);
+    console.log('dom.peopleAmount', thisBooking.dom.peopleAmount.correctValue),
+
+    thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount);
+    console.log('dom.hoursAmount', thisBooking.dom.hoursAmount.value),
+
     thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
-    thisBooking.dom.hourPickerOutput = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.output);
+    // thisBooking.dom.hourPickerOutput = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.output);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
     thisBooking.dom.floorPlan = thisBooking.dom.wrapper.querySelector(select.booking.floorPlan);
-    thisBooking.dom.form = thisBooking.dom.wrapper.querySelector(select.booking.form);
     thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector(select.booking.phone);
     thisBooking.dom.address = thisBooking.dom.wrapper.querySelector(select.booking.address);
     thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
+    thisBooking.dom.form = thisBooking.dom.wrapper.querySelector(select.booking.form);
+    //thisBooking.dom.form = element.querySelector(select.booking.form);
+    thisBooking.dom.submit = document.querySelector(select.booking.submit);
+    console.log('dom.form', thisBooking.dom.form);
   } 
 
   initWidgets(){
@@ -189,44 +196,45 @@ class Booking{
       thisBooking.initTables(event); 
     });
 
-    thisBooking.dom.form.addEventListener('submit', function(event){
+    thisBooking.dom.floorPlan.addEventListener('click', function(event){
+      thisBooking.initTables(event);
+    });
+  
+    thisBooking.dom.submit.addEventListener('click', function(event){
       event.preventDefault();
       thisBooking.sendBooking();
     });
+
+    console.log(thisBooking);
   }
 
-  initTables(){
+  initTables(event){
     const thisBooking = this;
-
-    thisBooking.dom.floorPlan.addEventListener('click', function(event){
-      event.preventDefault();
-
-      const clickedElement = event.target;
-      const chosenTableId = clickedElement.getAttribute(settings.booking.tableIdAttribute);
-      //   console.log('clickedElement', clickedElement);
-      //   console.log('chosenTableId', chosenTableId);
+    const clickedElement = event.target;
+    const chosenTableId = clickedElement.getAttribute(settings.booking.tableIdAttribute);
+    //   console.log('clickedElement', clickedElement);
+    //   console.log('chosenTableId', chosenTableId);
     
-      // sprawdzam czy faktycznie kliknięto stolik i czy stolik jest wolny 
-      if(clickedElement.classList.contains('table') && !clickedElement.classList.contains(classNames.booking.tableBooked)){
-        //jesli tak, to sprawdzam, czy stolik nie ma nadanej klasy selected 
-        if(!clickedElement.classList.contains(classNames.booking.tableSelected)){
-          thisBooking.resetTable(clickedElement); 
-          // jesli tak to dodaje do stolika klase selected            
-          clickedElement.classList.add(classNames.booking.tableSelected);
+    // sprawdzam czy faktycznie kliknięto stolik i czy stolik jest wolny 
+    if(clickedElement.classList.contains('table') && !clickedElement.classList.contains(classNames.booking.tableBooked)){
+      //jesli tak, to sprawdzam, czy stolik nie ma nadanej klasy selected 
+      if(!clickedElement.classList.contains(classNames.booking.tableSelected)){
+        thisBooking.resetTable(clickedElement); 
+        // jesli tak to dodaje do stolika klase selected            
+        clickedElement.classList.add(classNames.booking.tableSelected);
        
-          // i przypisuje numer stolika do wlasciwosci thisBooking.tableChosen
-          thisBooking.tableChosen = chosenTableId;
+        // i przypisuje numer stolika do wlasciwosci thisBooking.tableChosen
+        thisBooking.tableChosen = chosenTableId;
         //   console.log('tableChosen', thisBooking.tableChosen);
-        } else { 
-          clickedElement.classList.remove(classNames.booking.tableSelected);
-          thisBooking.tableChosen = '';
+      } else { 
+        clickedElement.classList.remove(classNames.booking.tableSelected);
+        thisBooking.tableChosen = '';
         //   console.log('tableChosen', thisBooking.tableChosen);
-        }
-      }else if (clickedElement.classList.contains(classNames.booking.tableBooked)){ 
-        // jesli nie pokazuje alert, z komunikatem o zajetosci stolika 
-        alert('W wybranym terminie ten stolik jest zajęty');
       }
-    });
+    }else if (clickedElement.classList.contains(classNames.booking.tableBooked)){ 
+      // jesli nie pokazuje alert, z komunikatem o zajetosci stolika 
+      alert('W wybranym terminie ten stolik jest zajęty');
+    }
   }
 
   resetTable(chosenTableId){
@@ -252,9 +260,9 @@ class Booking{
     console.log('payload', payload);
 
     payload.date = thisBooking.datePicker.value; // data wybrana w datePickerze
-    payload.hour = utils.hourToNumber(thisBooking.hourPicker.value); //thisBooking.hourPicker.value; // godzina wybrana w hourPicekrze w formacie HH:ss
+    payload.hour = thisBooking.hourPicker.value; //thisBooking.hourPicker.value; // godzina wybrana w hourPicekrze w formacie HH:ss
     payload.table = parseInt(thisBooking.tableChosen); // LICZBA - numer wybranego stolika lub null jesli nic nie wybrano
-    payload.duration = parseInt(thisBooking.hoursAmount.value); // LICZBA -liczba godzin wybrana przez klienta 
+    payload.duration = parseInt(thisBooking.hoursAmount.correctValue); // LICZBA -liczba godzin wybrana przez klienta 
     payload.ppl = parseInt(thisBooking.peopleAmount.value); // LICZBA - wybrana liczba osob 
     payload.starters = [];
     payload.phone = thisBooking.dom.phone.value; // numer telefonu z formualrza

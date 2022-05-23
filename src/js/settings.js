@@ -41,13 +41,14 @@ export const select = { // obiekt
   },
   booking: {
     peopleAmount: '.people-amount',
-    hoursAmount: '.hours-amount',
+    hoursAmount: '.widget-amount',
     tables: '.floor-plan .table',
     floorPlan: '.floor-plan', 
-    form: '.order-confirmation [type="submit"]',
+    form: '.order-confirmation',
     phone: '[name="phone"]',
     address: '[name="address"]',
-    starters: '.booking-form [name="starter"]'
+    starters: '.booking-form [name="starter"]',
+    submit: '.booking-form [type="submit"]',
   },
   nav: {
     links: '.main-nav a',
