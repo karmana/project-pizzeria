@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:400,300i,700%7COswald:300,500,700&amp;subset=latin-ext" rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="vendor/flickity.css">
   <link rel="stylesheet" href="vendor/range-slider.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -21,6 +22,7 @@
           <h2 class="logo__subtitle">the best homemade Italian food</h2>
         </div>
         <div class="main-nav">
+          <a href="#home">Home</a>
           <a href="#order">Order</a>
           <a href="#booking">Booking</a>
       </div>
@@ -62,6 +64,56 @@
   </header>
 
   <div id="pages">
+
+    <section id="home">
+      <div class="home container">
+
+        <div class="boxes">
+          <div class="small-box">
+            <a href="/#/order">
+            <img class="" src="https://i.postimg.cc/cLZX33N0/pizza-1.jpg" alt="order"/>
+            <h2>ORDER ONLINE</h2></a>
+            
+          </div>
+          <div class="small-box">
+            <a href="/#/booking">
+            <img class="" src="https://i.postimg.cc/q7vwbdRF/pizza-2.jpg" alt="booking"/>
+            <h2>BOOK A TABLE</h2></a>
+            
+          </div>
+          <div class="double-box">
+            <h2>OPENINGS HOURS:</h2>
+            <p>TUE-SUN, 12PM - 12AAM</p>
+          </div>
+
+        </div>
+<!-- 
+        <div class="caruzel">
+
+          <div class="main-carousel">
+            <div class="carousel-cell" data-flickity='{ "groupCells": 2" autoPlay": true }'></div>
+            <div class="carousel-cell"><a href="#"><img class="carousel-image" src="https://i.postimg.cc/cLZX33N0/pizza-1.jpg" alt="pizza-1"/></a></div>
+            <div class="carousel-cell"><h2>Great venue</h2><p>Lorem ipsum 1 Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum </p></div>
+            <div class="carousel-cell"><a href="#"><img class="carousel-image" src="https://i.postimg.cc/q7vwbdRF/pizza-2.jpg" alt="pizza-2"/></a></div>
+            <div class="carousel-cell"><h2>Delicious food</h2><p>Lorem ipsum 2 Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum </p></div>
+            <div class="carousel-cell"><a href="#"><img class="carousel-image" src="https://i.postimg.cc/8zHwmC1W/pizza-3.jpg" alt="pizza-3"/></a></div>
+            <div class="carousel-cell"><h2>Best service</h2><p>Lorem ipsum 3 Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum </p></div>
+          </div>
+        </div>
+
+        <div class="insta-gallery">
+          <div class="box-img"><img src="https://i.postimg.cc/xjRYwvTb/pizza-4.jpg" alt=""></div>
+          <div class="box-img"><img src="https://i.postimg.cc/FsCvRhSr/pizza-5.jpg" alt=""></div>
+          <div class="box-img"><img src="https://i.postimg.cc/bvkf3bBr/pizza-6.jpg" alt=""></div>
+          <div class="box-img"><img src="https://i.postimg.cc/xT1YnXcp/pizza-7.jpg" alt=""></div>
+          <div class="box-img"><img src="https://i.postimg.cc/P5BkWKK0/pizza-8.jpg" alt=""></div>
+          <div class="box-img"><img src="https://i.postimg.cc/CxZgn9Cj/pizza-9.jpg" alt=""></div>
+        </div> -->
+    
+      </div>
+    </section>
+    
+    
     <section id="order">
       <div id="product-list" class="product-list container"></div>
     </section>
@@ -180,6 +232,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="vendor/range-slider.min.js"></script>
+  <script src="vendor/flickity.pkgd.min.js"></script>
   <script src="js/app.js" type="module"></script>
   <script id="template-booking-widget" type="text/x-handlebars-template">
     <div class="booking-widget">
@@ -239,8 +292,9 @@
           </div>
         </div>
         <div class="order-confirmation">
-          <input type="tel" name="phone" placeholder="Your phone">
-          <input type="text" name="address" placeholder="Your address">
+          <input type="text" name="name" placeholder="Your name*" required="=required">
+          <input type="tel" name="phone" placeholder="Your phone*" required="=required">
+          <input type="email" name="address" placeholder="Your email*" required="=required">
           <button type="submit" class="btn-secondary">Book table</button>
         </div>
       </form>

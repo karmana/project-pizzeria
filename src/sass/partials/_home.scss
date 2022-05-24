@@ -1,0 +1,68 @@
+.boxes {
+    font-family: $font-header;
+    font-size: 26px;
+    color: $color-light;
+    font-weight: $font-bold;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 5px 5px 20px;
+
+        .small-box {
+            height: 120px;
+            width: calc(50% - 5px);
+            position: relative;
+        
+            &:first-child {
+                margin-right: 5px;
+            }
+
+            h2 {
+                font-size: 26px;
+                text-align: center;
+                z-index: 99;
+                position: relative;
+                padding-top: 10px;
+            }
+
+            img {
+                position: absolute; 
+                height: 120px;
+                width: 100%;
+                object-fit: cover; 
+                border-radius: $radius;
+            }
+
+            a {
+                text-decoration: none;
+                color: $color-light;
+            }
+        }
+
+        .double-box {
+            height: 120px;
+            width: 100%;
+            background-color: $color-main;
+            border-radius: $radius;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 5px 0 0 0;
+
+            h2 {
+                margin: 0;
+                padding: 0;
+                font-size: 26px;
+            }
+            p {
+                font-family: $font-text;
+                font-weight: $font-light;
+                font-size: 14px;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+}
