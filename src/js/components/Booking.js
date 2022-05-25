@@ -168,6 +168,7 @@ class Booking{
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
     thisBooking.dom.floorPlan = thisBooking.dom.wrapper.querySelector(select.booking.floorPlan);
+    thisBooking.dom.name = thisBooking.dom.wrapper.querySelector(select.booking.name);
     thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector(select.booking.phone);
     thisBooking.dom.address = thisBooking.dom.wrapper.querySelector(select.booking.address);
     thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
@@ -195,7 +196,7 @@ class Booking{
       thisBooking.initTables(event);
     });
   
-    thisBooking.dom.submit.addEventListener('click', function(event){
+    thisBooking.dom.form.addEventListener('submit', function(event){
       event.preventDefault();
       thisBooking.sendBooking();
     });
@@ -207,8 +208,6 @@ class Booking{
     const thisBooking = this;
     const clickedElement = event.target;
     const chosenTableId = clickedElement.getAttribute(settings.booking.tableIdAttribute);
-    //   console.log('clickedElement', clickedElement);
-    //   console.log('chosenTableId', chosenTableId);
     
     // sprawdzam czy faktycznie kliknięto stolik i czy stolik jest wolny 
     if(clickedElement.classList.contains('table') && !clickedElement.classList.contains(classNames.booking.tableBooked)){
@@ -220,11 +219,10 @@ class Booking{
        
         // i przypisuje numer stolika do wlasciwosci thisBooking.tableChosen
         thisBooking.tableChosen = chosenTableId;
-        //   console.log('tableChosen', thisBooking.tableChosen);
+
       } else { 
         clickedElement.classList.remove(classNames.booking.tableSelected);
         thisBooking.tableChosen = '';
-        //   console.log('tableChosen', thisBooking.tableChosen);
       }
     }else if (clickedElement.classList.contains(classNames.booking.tableBooked)){ 
       // jesli nie pokazuje alert, z komunikatem o zajetosci stolika 
@@ -256,9 +254,9 @@ class Booking{
 
     thisBooking.peopleAmountWidget.value = 1;
     thisBooking.hoursAmountWidget.value = 1;
-    // thisBooking.datePicker.value = ;
-    // thisBooking.hourPicker.value = 12; 
-    
+    thisBooking.dom.name.value = '';
+    thisBooking.dom.phone.value = '';
+    thisBooking.dom.address.value = '';
   }
 
   sendBooking(){
@@ -276,6 +274,7 @@ class Booking{
     payload.duration = parseInt(thisBooking.hoursAmountWidget.value); // LICZBA -liczba godzin wybrana przez klienta 
     payload.ppl = parseInt(thisBooking.peopleAmountWidget.value); // LICZBA - wybrana liczba osob 
     payload.starters = [];
+    payload.name = thisBooking.dom.name.value;
     payload.phone = thisBooking.dom.phone.value; // numer telefonu z formualrza
     payload.address = thisBooking.dom.address.value; // adres z formualrza 
 
