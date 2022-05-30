@@ -72,8 +72,6 @@ const app = {
     const thisApp = this;
 
     thisApp.boxesLinks = document.querySelectorAll(select.boxes.links);
-    console.log('BoxLinks', thisApp.boxesLinks);
-    console.log('thisApp.pages',thisApp.pages);
 
     for(let link of thisApp.boxesLinks){
       link.addEventListener('click', function(event){

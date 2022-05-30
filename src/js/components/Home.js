@@ -33,25 +33,6 @@ class Home{
   }
 
   
-  activatePage(){
-    
-    for(let link of thisHome.navLinks){
-      link.addEventListener('click', function(event){
-        const clickedElement = this;
-        event.preventDefault();
-
-        /* get page id from href attribute */
-        const id = clickedElement.getAttribute('href').replace('#', ''); //w stalej id zapisujemy atrybut hre kliknietego elementu, w ktorym zamienimy # na pusty ciag znakow - zamieniajac to pozostanie nam tekst ktory jest o tym znaku, czyli order lub bookind odpowiadajce id strony 
-
-        /* run thisHome.activatePage with that id */
-        thisHome.activatePage(id);
-
-        /* change URL hash */
-        window.location.hash = '#/' + id; //dodajemy / po # zeby uniknac domyslnego zachowania przegladarki - przewiniecia strony do elementu o tej samej nazwie (#order) co link (#order)
-      });
-    }
-  }
-
   activatePage(pageId){ //metoda, bedaca funkcja przyjmujaca jeden argument pageId
     const thisHome = this;
 
