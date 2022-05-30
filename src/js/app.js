@@ -2,6 +2,7 @@ import {settings, select, classNames} from './settings.js'; //importuj obiekty s
 import Product from './components/Product.js'; //bez {}, nawiasow uzywamy wtedy kiedy importujemy wiecej niz 1 obiekt, product.js importujemy jako domyslny, moze byc bez {}
 import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
+// import Home from './components/Home.js';
 
 const app = {
   initPages: function(){
@@ -9,6 +10,7 @@ const app = {
 
     thisApp.pages = document.querySelector(select.containerOf.pages).children; //tworzymy wlasciwosc, w ktorej bedziemy przechowywac wszystkie kontenery podstron (w kontenerze pages), wlasciwosc children - dzieki niej we wlasciwosci pages znajda sie wszystkie dzieci kontenra pages (sekcka order i booking)
     thisApp.navLinks = document.querySelectorAll(select.nav.links); //ten selekstor wyszukuje wszystkie linki, dlatego nie stosujemy children
+    console.log('NavLinks', thisApp.navLinks);
 
     //thisApp.activatePage(thisApp.pages[0].id); //metodzie przekazujemu informacje, ktora strona ma byc aktywowana, przekazujemy id kontenera - id pierwszej ze stron znalezionej i zapisanej w thisApp.pages
 
@@ -66,6 +68,26 @@ const app = {
     }
   },
 
+  initBoxes: function(){
+    const thisApp = this;
+
+    thisApp.boxesLinks = document.querySelectorAll(select.boxes.links);
+    console.log('BoxLinks', thisApp.boxesLinks);
+    console.log('thisApp.pages',thisApp.pages);
+
+    for(let link of thisApp.boxesLinks){
+      link.addEventListener('click', function(event){
+        event.preventDefault();
+        const clickedLink = this;
+        const linkHref = clickedLink.getAttribute('href').replace('#/', '');
+
+        thisApp.activatePage(linkHref);
+        window.location.hash = '#/' + linkHref; 
+      });
+    }
+  },
+
+
   initMenu: function(){ //metoda wywolywana po iniData, bo korzysta z przygotowanej wczesniej referencji do danych (thisApp.data)
     const thisApp = this;
       
@@ -120,6 +142,13 @@ const app = {
     
   },
 
+  // initHome: function(){
+  //   const thisApp = this;
+
+  //   const home = document.querySelector(select.containerOf.smallBoxes);
+  //   thisApp.homeBoxes = new Home (home);
+  // },
+
   init: function(){
     const thisApp = this;
     // console.log('*** App starting ***');
@@ -130,6 +159,7 @@ const app = {
     
     thisApp.initPages();
     thisApp.initData();
+    thisApp.initBoxes();
     //thisApp.initMenu();
     thisApp.initCart();
     thisApp.initBooking();

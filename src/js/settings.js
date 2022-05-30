@@ -9,6 +9,9 @@ export const select = { // obiekt
     cart: '#cart',
     pages: '#pages',
     booking: '.booking-wrapper',
+    slider: '.my-slider',
+    boxes: '.boxes',
+   
   },
   all: {
     menuProducts: '#product-list > .product',
@@ -22,6 +25,10 @@ export const select = { // obiekt
     imageWrapper: '.product__images',
     amountWidget: '.widget-amount',
     cartButton: '[href="#add-to-cart"]',
+  },
+  boxes: {
+    smallBoxes: '.small-box',
+    links: '.box-link',
   },
   widgets: {
     amount: {
