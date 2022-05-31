@@ -1,245 +1,250 @@
 .home-wrapper {
-    margin: ($base-size * 3.5) auto;
-    padding: ($base-size * 6) ($base-size * 4);
-    background: $color-light;
-    border-bottom: 1px solid lighten($color-dark, 70%);
-    border-radius: $radius;
-  }
+  margin: ($base-size * 3.5) auto;
+  padding: ($base-size * 6) ($base-size * 4);
+  background: $color-light;
+  border-bottom: 1px solid lighten($color-dark, 70%);
+  border-radius: $radius;
+}
 
 /* Small boxes section */
 
 .boxes {
-    font-family: $font-header;
-    font-size: 26px;
-    color: $color-light;
-    font-weight: $font-bold;
+  font-family: $font-header;
+  font-size: 26px;
+  color: $color-light;
+  font-weight: $font-bold;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  .small-box {
+    height: 120px;
+    position: relative;
+    width: 49%;
+
+    &:first-child {
+      margin-right: 2%;
+    } 
+
+    &:hover {
+      .box-info {
+        display: block;
+      }
+                
+      h2, .box-info {
+        animation: move 1s ease-in-out;
+        animation-fill-mode: forwards;
+      }
+    }
+
+    h2 {
+      animation-name: moveback;
+      animation-duration: 1s;
+
+    }
+
+    @keyframes move {
+      from { transform: translateY(0); }
+
+      to { transform: translateY(-25px); }
+    }
+
+    @keyframes moveback {
+      from { transform: translateY(-25px); }
+
+      to { transform: translateY(0); }
+    }
+        
+    .box-info {
+      font-family: $font-text;
+      font-weight: $font-light;
+      font-size: 14px;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      display: none;
+    }
+
+    .small-box-order {
+      background-image: url("https://i.postimg.cc/cLZX33N0/pizza-1.jpg");
+      height: 120px;
+      background-size: cover;
+      border-radius: $radius;
+      position: absolute;
+      width: 100%;
+    }
+
+    .small-box-booking {
+      background-image: url("https://i.postimg.cc/q7vwbdRF/pizza-2.jpg");
+      height: 120px;
+      background-size: cover;
+      border-radius: $radius;
+      position: absolute;
+      width: 100%;
+    }
+
+    h2 {
+      font-size: 26px;
+      text-align: center;
+      z-index: 99;
+      position: relative;
+      padding-top: 17px;            
+    }
+
+    img {
+      position: absolute;
+      height: 120px;
+      width: 100%;
+      object-fit: cover;
+      border-radius: $radius;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+      color: $color-light;
+      top: -50px;
+    }
+
+  }
+
+  .double-box {
+    height: 120px;
+    width: 100%;
+    background-color: $color-main;
+    border-radius: $radius;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 10px 0 0 0;
 
-        .small-box {
-            height: 120px;
-            position: relative;
-            width: 49%;
+    h2 {
+      margin: 0;
+      padding: 0;
+      font-size: 26px;
+    }
 
-            &:first-child {
-                margin-right: 2%;
-            } 
-
-            &:hover {
-                .box-info {
-                    display: block;
-                }
-                
-                h2, .box-info {
-                    animation: move 1s ease-in-out;
-                    animation-fill-mode: forwards;
-                }
-            }
-
-            h2 {
-                animation-name: moveback;
-                animation-duration: 1s;
-
-            }
-
-            @keyframes move {
-                from { transform: translateY(0) }
-                to { transform: translateY(-25px) }
-            }
-
-            @keyframes moveback {
-                from { transform: translateY(-25px) }
-                to { transform: translateY(0) }
-            }
-        
-            .box-info {
-                font-family: $font-text;
-                font-weight: $font-light;
-                font-size: 14px;
-                margin: 0;
-                padding: 0;
-                text-align: center;    
-                display: none;
-            }
-
-            .small-box-order {
-                background-image: url("https://i.postimg.cc/cLZX33N0/pizza-1.jpg");
-                height: 120px;
-                background-size: cover;
-                border-radius: $radius;
-                position: absolute; 
-                width: 100%;
-            }
-
-            .small-box-booking {
-                background-image: url("https://i.postimg.cc/q7vwbdRF/pizza-2.jpg");
-                height: 120px;
-                background-size: cover;
-                border-radius: $radius;
-                position: absolute; 
-                width: 100%;
-            }
-
-            h2 {
-                font-size: 26px;
-                text-align: center;
-                z-index: 99;
-                position: relative;
-                padding-top: 17px;            
-            }
-
-            img {
-                position: absolute; 
-                height: 120px;
-                width: 100%;
-                object-fit: cover; 
-                border-radius: $radius;
-            }
-
-            a {
-                display: block;
-                text-decoration: none;
-                color: $color-light;
-                top: -50px;
-            }
-
-        }
-
-        .double-box {
-            height: 120px;
-            width: 100%;
-            background-color: $color-main;
-            border-radius: $radius;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 10px 0 0 0;
-
-            h2 {
-                margin: 0;
-                padding: 0;
-                font-size: 26px;
-            }
-            p {
-                font-family: $font-text;
-                font-weight: $font-light;
-                font-size: 14px;
-                margin: 0;
-                padding: 0;
-            }
-        }
+    p {
+      font-family: $font-text;
+      font-weight: $font-light;
+      font-size: 14px;
+      margin: 0;
+      padding: 0;
+    }
+  }
 
 }
 
 /* Reviews section */
 .carousel {
-    margin: 100px 0;
+  margin: 100px 0;
 
- .main-carousel {
+  .main-carousel {
     .carousel-cell{
-        display: flex;
-        flex-wrap: nowrap;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
+      display: flex;
+      flex-wrap: nowrap;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
 
-        h2 {
-            text-transform: uppercase;
-            font-family: $font-text;
-            font-weight: $font-bold;
-            font-size: 14px;
-            color: $color-dark;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
+      h2 {
+        text-transform: uppercase;
+        font-family: $font-text;
+        font-weight: $font-bold;
+        font-size: 14px;
+        color: $color-dark;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
 
-            img {
-                width: 190px;
-                height: 190px;
-                object-fit: cover;
-                border-radius: $radius
-            }
+      img {
+        width: 190px;
+        height: 190px;
+        object-fit: cover;
+        border-radius: $radius;
+      }
 
-            .review {
-                font-family: $font-text;
-                font-weight: $font-normal;
-                font-size: 14px;
-                color: $color-dark;
-                margin: 0 20px;
+      .review {
+        font-family: $font-text;
+        font-weight: $font-normal;
+        font-size: 14px;
+        color: $color-dark;
+        margin: 0 20px;
+      }
 
-                .review-text {
-                    margin-top: 5px;
-                }
-                .review-author {
-                    font-style: italic;
-                }
-            }
-        }
- }
+      .review-text {
+        margin-top: 5px;
+      }
+
+      .review-author {
+        font-style: italic;
+      }
+    }
+  }
 }
 
 /* Insta gallery section */
 
 .insta-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 50px;
     
     
-    .box-img {
-        position: relative;
-        display: block;
+  .box-img {
+    position: relative;
+    display: block;
 
 
-        .insta-img {
-        width: 190px;
-        height: 190px;
-        border-radius: $radius;
-        object-fit: cover; 
-        margin-top: 10px;
-        }
+    .insta-img {
+      width: 190px;
+      height: 190px;
+      border-radius: $radius;
+      object-fit: cover;
+      margin-top: 10px;
+    }
 
-        &:hover .image-overlay {
-            opacity: 0.6;
-        }
+    &:hover .image-overlay {
+      opacity: 0.6;
+    }
 
-        &:hover .icons {
-            color: $color-main;
-            transition: 1s ease;
-            transform: scale(1.5);
-        }
+    &:hover .icons {
+      color: $color-main;
+      transition: 1s ease;
+      transform: scale(1.5);
+    }
 
-        .image-overlay {
-            content: " ";
-            top: 10px;
-            left: 0;
-            background-color: $color-dark;
-            width: 100%;
-            height: 100%;
-            max-height: 190px;
-            position: absolute;
-            transition: 1s ease;
-            border-radius: $radius;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-        }
+    .image-overlay {
+      content: " ";
+      top: 10px;
+      left: 0;
+      background-color: $color-dark;
+      width: 100%;
+      height: 100%;
+      max-height: 190px;
+      position: absolute;
+      transition: 1s ease;
+      border-radius: $radius;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+    }
     
-        .icons{
-            color: #ffffff;
+    .icons{
+      color: #ffffff;
             
             
-            i {
-                margin-right: 5px;
-            }
-        }   
-    }
-    a {
-        color: $color-main;
-    }
+      i {
+        margin-right: 5px;
+      }
+    }   
+  }
+
+  a {
+    color: $color-main;
+  }
 }

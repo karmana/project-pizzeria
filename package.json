@@ -12,7 +12,8 @@
         "test": "npm-run-all test:*",
         "test:html": "html-validate src/*.html",
         "test:js": "eslint src/js/",
-        "test:scss": "stylelint src/sass/",
+        "test:scss": "stylelint src/sass/ --syntax scss -f verbose --color",
+        "test:scss:fix": "stylelint src/sass/ --syntax scss --fix -f verbose —color",
         "build": "npm-run-all build:* test",
         "build:clean": "rimraf dist && mkdirp dist",
         "build:copy": "copyfiles -a -u 1 -e \"**/sass/**/*\" -e \"**/.gitkeep\" \"src/**/*\" dist",
@@ -30,10 +31,15 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@babel/cli": "^7.17.10",
+        "@babel/core": "^7.18.2",
+        "@babel/eslint-parser": "^7.18.2",
+        "@babel/eslint-plugin": "^7.17.7",
+        "@babel/preset-env": "^7.18.2",
         "autoprefixer": "^10.2.4",
         "browser-sync": "^2.26.3",
         "copyfiles": "^2.1.0",
-        "eslint": "^5.14.1",
+        "eslint": "^5.16.0",
         "globstar": "^1.0.0",
         "html-validate": "^2.8.0",
         "mkdirp": "^0.5.1",
@@ -52,7 +58,6 @@
         "tiny-slider": "^2.9.4"
     },
     "engines": {
-          "node": ">=0.10.3 <15"
-        }
-      
+        "node": ">=0.10.3 <15"
+    }
 }
